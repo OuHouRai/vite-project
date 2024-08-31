@@ -1,13 +1,13 @@
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <div class="Test">
-    test
-  </div>
+  <router-view></router-view>
 </template>
 
-<style lang="less" scoped>
-  @import "./styles/Test.less";
+<style lang="less">
+#app {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
 </style>
