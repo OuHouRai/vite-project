@@ -6,7 +6,7 @@ import ElementPlus from "element-plus";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 import { createPinia } from "pinia";
 import "@/api/mock.js";
-import api from "@/api/api.js";
+import api from "./api/api.js";
 const pinia = createPinia();
 const app = createApp(App);
 

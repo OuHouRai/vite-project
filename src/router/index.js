@@ -41,16 +41,10 @@ const routes = [
         name: "page2",
         component: () => PageTwo,
       },
-      // {
-      //   path: "/other",
-      //   name: "other",
-      //   component: () => Other,
-      //   children: [],
-      // },
     ],
   },
   {
-    path: "/",
+    path: "/login",
     name: "login",
     component: () => Login,
   },

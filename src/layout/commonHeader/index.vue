@@ -16,7 +16,7 @@
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item>个人中心</el-dropdown-item>
-            <el-dropdown-item :to="{ path: '/login' }">退出</el-dropdown-item>
+            <el-dropdown-item @click="backLogin">退出</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -29,12 +29,17 @@ import { ref, computed } from "vue";
 import { useAllDataStore } from "@/stores";
 const store = useAllDataStore();
 import { useRouter } from "vue-router";
+const router = useRouter();
 const getImageUrl = () => {
   return new URL("@/assets/images/user.png", import.meta.url).href;
 };
 
 const handleCollapse = () => {
   store.state.isCollapse = !store.state.isCollapse;
+};
+
+const backLogin = () => {
+  router.push("/login");
 };
 </script>
 
