@@ -1,3 +1,8 @@
+<script setup>
+import CommonAside from "@/layout/commonAside/index.vue";
+import CommonHeader from "@/layout/commonHeader/index.vue";
+</script>
+
 <template>
   <div class="common-layout">
     <el-container class="lay-container">
@@ -6,15 +11,13 @@
         <el-header class="el-header">
           <common-header />
         </el-header>
-        <el-main class="right-main"> main</el-main>
+        <el-main class="right-main">
+          <router-view></router-view>
+        </el-main>
       </el-container>
     </el-container>
   </div>
 </template>
-
-<script setup>
-import CommonAside from "@/layout/commonAside/index.vue";
-</script>
 
 <style scoped lang="less">
 .common-layout,
