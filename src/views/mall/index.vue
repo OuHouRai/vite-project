@@ -14,7 +14,7 @@
     <el-table-column property="tenderer" label="招标人" />
     <el-table-column property="date" label="日期" width="180" />
   </el-table>
-  <el-dialog v-model="dialogVisible" :title="action == 'add' ? '新增用户' : '编辑用户'" width="35%" :before-close="handleClose">
+  <el-dialog v-model="dialogVisible" :title="action == 'add' ? '新增项目' : '编辑项目'" width="35%" :before-close="handleClose">
     <el-form :inline="true" :model="formProject" :rules="rules" ref="projectForm">
       <el-row>
         <el-col :span="12">
