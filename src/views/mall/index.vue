@@ -12,9 +12,36 @@
     <el-table-column property="projectIndex" label="项目标号" />
     <el-table-column property="projectName" label="项目名称" show-overflow-tooltip />
     <el-table-column property="tenderer" label="招标人" />
-    <el-table-column property="date" label="日期" width="180" />
+    <el-table-column property="date" label="日期" width="120" />
+    <el-table-column width="100">
+      <template #default="scope">
+        <el-button type="primary" @click.prevent="handleUpdate(scope.$index)">
+          修改
+        </el-button>
+      </template>
+    </el-table-column>
+    <el-table-column width="100">
+      <template #default="scope">
+        <el-button type="danger" @click.prevent="handleDelete(scope.$index)">
+          删除
+        </el-button>
+      </template>
+    </el-table-column>
   </el-table>
-  <el-dialog v-model="dialogVisible" :title="action == 'add' ? '新增项目' : '编辑项目'" width="35%" :before-close="handleClose">
+  <!-- 删除弹窗 -->
+  <el-dialog v-model="centerDialogVisible" title="提示" width="500">
+    <span>请问确定要删除这条数据么？</span>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="centerDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="handleConfirm">
+          确认
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
+  <!-- 修改或编辑项目弹窗 -->
+  <el-dialog v-model="dialogVisible" :title="action == 'add' ? '新增项目' : '修改项目'" width="35%" :before-close="handleClose">
     <el-form :inline="true" :model="formProject" :rules="rules" ref="projectForm">
       <el-row>
         <el-col :span="12">
@@ -48,14 +75,21 @@
   </el-dialog>
 </template>
 
-<script setup>
+<script lang="ts" setup>
   import { ElTable } from 'element-plus'
   import { reactive, ref, getCurrentInstance } from "vue"
 
   const { proxy } = getCurrentInstance()
   const action = ref('add')
+  const updateIndex = ref(0)
+  const centerDialogVisible = ref(false)
   const dialogVisible = ref(false)
-  const formProject = reactive({})
+  const formProject = reactive({
+    projectIndex: '',
+    projectName: '',
+    tenderer: '',
+    date: ''
+  })
   const rules = reactive({
     projectIndex: [{ required: true, message: "项目标号为必须入力项", trigger: "blur" }]
   })
@@ -81,6 +115,11 @@
 
   ])
   const handleAddProject = () => {
+    //清空原始对象
+    for (const key in formProject) {
+      delete formProject[key]
+    }
+    Object.assign(formProject, {})
     dialogVisible.value = true
     action.value = 'add'
   }
@@ -90,24 +129,44 @@
   const handleCancel = () => {
     dialogVisible.value = false
   }
+  const handleUpdate = (index) => {
+    action.value = 'update'
+    updateIndex.value = index
+    dialogVisible.value = true
+    formProject.projectIndex = tableData.value[index].projectIndex
+    formProject.projectName = tableData.value[index].projectName
+    formProject.tenderer = tableData.value[index].tenderer
+    formProject.date = tableData.value[index].date
+  }
+  const handleDelete = (index) => {
+    centerDialogVisible.value = true
+    updateIndex.value = index
+  }
+  const handleConfirm = () => {
+    tableData.value.splice(updateIndex, 1)
+    centerDialogVisible.value = false
+  }
   const onSubmit = () => {
     proxy.$refs['projectForm'].validate((vaild) => {
       if (vaild) {
+        const projectAdd = {
+          projectIndex: formProject.projectIndex,
+          projectName: formProject.projectName,
+          tenderer: formProject.tenderer,
+          date: formProject.date
+        }
         if (action.value == 'add') {
-          const projectAdd = {
-            projectIndex: formProject.projectIndex,
-            projectName: formProject.projectName,
-            tenderer: formProject.tenderer,
-            date: formProject.date
-          }
           tableData.value.push(projectAdd)
+          dialogVisible.value = false
+          proxy.$refs['projectForm'].resetFields()
+        } else {
+          tableData.value.splice(updateIndex.value, 1, projectAdd)
           dialogVisible.value = false
           proxy.$refs['projectForm'].resetFields()
         }
       } else {
         alert('请输入必须入力项目')
       }
-
     })
   }
   const tableData1 = [
