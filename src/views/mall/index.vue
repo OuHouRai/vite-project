@@ -1,7 +1,13 @@
 <template>
-  <div>
-    <el-button type="primary" @click="handleAddProject" style="margin-bottom: 20px;">
+  <div style="margin-bottom: 20px;">
+    <el-button type="primary" @click="handleAddProject">
       新增项目
+    </el-button>
+    <el-button type="success" @click="handleBatchImport" plain>
+      批量导入
+    </el-button>
+    <el-button type="info" @click="handleBatchExport" plain>
+      批量导出
     </el-button>
   </div>
   <el-table :data="tableData" class="body-table">
