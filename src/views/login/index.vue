@@ -1,6 +1,8 @@
 <script setup>
 import { reactive, getCurrentInstance } from "vue";
 import { useRouter } from "vue-router";
+import { useAllDataStore } from "@/stores";
+const store = useAllDataStore();
 
 const router = useRouter();
 const { proxy } = getCurrentInstance();
@@ -10,8 +12,11 @@ const loginForm = reactive({
   password: "",
 });
 const handleLogin = async () => {
-  // const res = await proxy.$api.getMenu(loginForm)
-  // console.log(res)
+  const res = await proxy.$api.getMenu(loginForm);
+
+  store.updateMenuList(res.menuList);
+  store.state.token = res.token;
+  store.addMenu(router);
   router.push("/home");
 };
 </script>

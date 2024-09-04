@@ -25,4 +25,11 @@ export default {
       method: "get",
     });
   },
+  getMenu(data) {
+    return request({
+      url: "/permission/getMenu",
+      method: "post",
+      data,
+    });
+  },
 };

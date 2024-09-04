@@ -66,6 +66,7 @@ const backLogin = () => {
     margin-right: 20px;
   }
 }
+
 .r-content {
   .user {
     width: 40px;
