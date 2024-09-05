@@ -32,13 +32,13 @@ const routes = [
       //   component: () => User,
       // },
       // {
-      //   path: "/page1",
-      //   name: "page1",
+      //   path: "/pageOne",
+      //   name: "pageOne",
       //   component: () => PageOne,
       // },
       // {
-      //   path: "/page2",
-      //   name: "page2",
+      //   path: "/pageTwo",
+      //   name: "pageTwo",
       //   component: () => PageTwo,
       // },
     ],

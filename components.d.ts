@@ -29,7 +29,6 @@ declare module 'vue' {
     ElRow: typeof import('element-plus/es')['ElRow']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElTable: typeof import('element-plus/es')['ElTable']
-    ElTablecolumn: typeof import('element-plus/es')['ElTablecolumn']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     ExcelExport: typeof import('./src/components/ExcelExport.vue')['default']

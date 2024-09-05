@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 function initState() {
   return {
@@ -18,16 +18,32 @@ export const useAllDataStore = defineStore("allData", () => {
 
   const state = ref(initState());
 
+  watch(
+    state,
+    (newObj) => {
+      if (!newObj.token) return;
+      localStorage.setItem("store", JSON.stringify(newObj));
+    },
+    { deep: true },
+  );
+
   function updateMenuList(val) {
     state.value.menuList = val;
   }
 
-  function addMenu(router) {
+  function addMenu(router, type) {
+    if (type === "refresh") {
+      if (JSON.parse(localStorage.getItem("store"))) {
+        state.value = JSON.parse(localStorage.getItem("store"));
+        state.value.routerList = [];
+      }
+    } else {
+      return;
+    }
     const menu = state.value.menuList;
     const module = import.meta.glob("../views/*/index.vue");
     const routeArr = [];
     menu.forEach((item) => {
-      console.log(item, "item");
       if (item.children) {
         item.children.forEach((val) => {
           let url = `../views/${val.url}/index.vue`;
@@ -41,7 +57,6 @@ export const useAllDataStore = defineStore("allData", () => {
       }
     });
 
-    console.log(routeArr, "routeArr");
     state.value.routerList = [];
     let routers = router.getRoutes();
     routers.forEach((item) => {
