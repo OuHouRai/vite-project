@@ -1,8 +1,3 @@
-<script setup>
-import CommonAside from "@/layout/commonAside/index.vue";
-import CommonHeader from "@/layout/commonHeader/index.vue";
-</script>
-
 <template>
   <div class="common-layout">
     <el-container class="lay-container">
@@ -19,7 +14,12 @@ import CommonHeader from "@/layout/commonHeader/index.vue";
   </div>
 </template>
 
-<style scoped lang="less">
+<script setup>
+import CommonAside from "@/layout/commonAside/index.vue";
+import CommonHeader from "@/layout/commonHeader/index.vue";
+</script>
+
+<style lang="less" scoped>
 .common-layout,
 .lay-container {
   height: 100%;

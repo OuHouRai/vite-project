@@ -5,6 +5,7 @@
       text-color="#fff"
       :collapse="isCollapse"
       :collapse-transition="false"
+      :default-active="activeMenu"
     >
       <h3 v-show="!isCollapse">抽选管理系统</h3>
       <h3 v-show="isCollapse">系统</h3>
@@ -49,7 +50,9 @@ const store = useAllDataStore();
 import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
 const route = useRoute();
-
+const activeMenu = computed(() => {
+  return route.path;
+});
 const list = computed(() => {
   return store.state.menuList;
 });

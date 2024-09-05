@@ -1,20 +1,20 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
-import Main from "@/views/main/index.vue";
+// import Main from "@/views/main/index.vue";
 // import User from "@/views/user/index.vue";
 // import Mall from "@/views/mall/index.vue";
 // import PageOne from "@/views/other/pageOne/index.vue";
 // import PageTwo from "@/views/other/PageTwo/index.vue";
 // import Home from "@/views/home/index.vue";
-import Login from "@/views/login/index.vue";
+// import Login from "@/views/login/index.vue";
 
 //制定路由规则
 const routes = [
   {
-    path: "/",
+    // path: "/",
     name: "main",
     redirect: "/home",
-    component: () => Main,
+    component: () => import("@/views/main/index.vue"),
     children: [
       // {
       //   path: "/home",
@@ -46,7 +46,7 @@ const routes = [
   {
     path: "/login",
     name: "login",
-    component: () => Login,
+    component: () => import("@/views/login/index.vue"),
   },
 ];
 

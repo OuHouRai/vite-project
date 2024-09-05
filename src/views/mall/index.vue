@@ -1,16 +1,24 @@
 <template>
-  <div style="margin-bottom: 20px;display: flex;">
-    <el-button type="primary" @click="handleAddProject">
-      新增项目
-    </el-button>
+  <div style="margin-bottom: 20px; display: flex">
+    <el-button type="primary" @click="handleAddProject"> 新增项目 </el-button>
     <!-- 上传excel -->
-    <el-upload :ref="(el) => handleSetUploadRefMap(el)" action="" :http-request="httpExcelRequest" :limit="1"
-      :show-file-list="false" :data={} style="margin-left: 20px;">
-      <el-button type="success" plain>
-        批量导入
-      </el-button>
+    <el-upload
+      :ref="(el) => handleSetUploadRefMap(el)"
+      action=""
+      :http-request="httpExcelRequest"
+      :limit="1"
+      :show-file-list="false"
+      :data="{}"
+      style="margin-left: 20px"
+    >
+      <el-button type="success" plain> 批量导入 </el-button>
     </el-upload>
-    <el-button type="info" @click="handleBatchExport" plain style="margin-left: 20px;">
+    <el-button
+      type="info"
+      @click="handleBatchExport"
+      plain
+      style="margin-left: 20px"
+    >
       批量导出
     </el-button>
   </div>
@@ -20,7 +28,11 @@
       <template #default="scope">{{ scope.$index + 1 }}</template>
     </el-table-column>
     <el-table-column property="projectIndex" label="项目标号" />
-    <el-table-column property="projectName" label="项目名称" show-overflow-tooltip />
+    <el-table-column
+      property="projectName"
+      label="项目名称"
+      show-overflow-tooltip
+    />
     <el-table-column property="tenderer" label="招标人" />
     <el-table-column property="date" label="日期" width="120" />
     <el-table-column width="100">
@@ -44,29 +56,46 @@
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="handleConfirm">
-          确认
-        </el-button>
+        <el-button type="primary" @click="handleConfirm"> 确认 </el-button>
       </div>
     </template>
   </el-dialog>
   <!-- 修改或编辑项目弹窗 -->
-  <el-dialog v-model="dialogVisible" :title="action == 'add' ? '新增项目' : '修改项目'" width="35%" :before-close="handleClose">
-    <el-form :inline="true" :model="formProject" :rules="rules" ref="projectForm">
+  <el-dialog
+    v-model="dialogVisible"
+    :title="action == 'add' ? '新增项目' : '修改项目'"
+    width="35%"
+    :before-close="handleClose"
+  >
+    <el-form
+      :inline="true"
+      :model="formProject"
+      :rules="rules"
+      ref="projectForm"
+    >
       <el-row>
         <el-col :span="12">
           <el-form-item lable="项目标号" prop="projectIndex">
-            <el-input v-model="formProject.projectIndex" placeholder="请输入项目标号" />
+            <el-input
+              v-model="formProject.projectIndex"
+              placeholder="请输入项目标号"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item lable="项目名称" prop="projectName">
-            <el-input v-model="formProject.projectName" placeholder="请输入项目名称" />
+            <el-input
+              v-model="formProject.projectName"
+              placeholder="请输入项目名称"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item lable="项目名称" prop="tenderer">
-            <el-input v-model="formProject.tenderer" placeholder="请输入招标人" />
+            <el-input
+              v-model="formProject.tenderer"
+              placeholder="请输入招标人"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -86,150 +115,151 @@
 </template>
 
 <script lang="ts" setup>
-  import { ElTable } from 'element-plus'
-  import { reactive, ref, getCurrentInstance } from "vue"
-  import { format } from 'date-fns'
-  const { proxy } = getCurrentInstance()
-  const { $untils, $isNull } = proxy
-  const action = ref('add')
-  const updateIndex = ref(0)
-  const centerDialogVisible = ref(false)
-  const dialogVisible = ref(false)
-  const formProject = reactive({
-    projectIndex: '',
-    projectName: '',
-    tenderer: '',
-    date: ''
-  })
-  const rules = reactive({
-    projectIndex: [{ required: true, message: "项目标号为必须入力项", trigger: "blur" }]
-  })
-  const tableData = ref([
-    {
-      projectIndex: 'CDZBFW-2024-101',
-      projectName: '郑东新区社区服务项目',
-      tenderer: '社区居民委员会',
-      date: '2024-05-04'
-    },
-    {
-      projectIndex: 'CDZBFW-2024-102',
-      projectName: '洛阳市人民政府后勤保障处',
-      tenderer: '社会保障部',
-      date: '2024-06-08'
-    },
-    {
-      projectIndex: 'CDZBFW-2024-103',
-      projectName: '洛阳市运河水利指挥系统中心',
-      tenderer: '民众运营中心',
-      date: '2024-12-06'
-    },
-
-  ])
-  const handleAddProject = () => {
-    //清空原始对象
-    for (const key in formProject) {
-      delete formProject[key]
-    }
-    Object.assign(formProject, {})
-    dialogVisible.value = true
-    action.value = 'add'
+import { ElTable } from "element-plus";
+import { reactive, ref, getCurrentInstance } from "vue";
+import { format } from "date-fns";
+const { proxy } = getCurrentInstance();
+const { $untils, $isNull } = proxy;
+const action = ref("add");
+const updateIndex = ref(0);
+const centerDialogVisible = ref(false);
+const dialogVisible = ref(false);
+const formProject = reactive({
+  projectIndex: "",
+  projectName: "",
+  tenderer: "",
+  date: "",
+});
+const rules = reactive({
+  projectIndex: [
+    { required: true, message: "项目标号为必须入力项", trigger: "blur" },
+  ],
+});
+const tableData = ref([
+  {
+    projectIndex: "CDZBFW-2024-101",
+    projectName: "郑东新区社区服务项目",
+    tenderer: "社区居民委员会",
+    date: "2024-05-04",
+  },
+  {
+    projectIndex: "CDZBFW-2024-102",
+    projectName: "洛阳市人民政府后勤保障处",
+    tenderer: "社会保障部",
+    date: "2024-06-08",
+  },
+  {
+    projectIndex: "CDZBFW-2024-103",
+    projectName: "洛阳市运河水利指挥系统中心",
+    tenderer: "民众运营中心",
+    date: "2024-12-06",
+  },
+]);
+const handleAddProject = () => {
+  //清空原始对象
+  for (const key in formProject) {
+    delete formProject[key];
   }
-  const handleClose = () => {
-    dialogVisible.value = false
-  }
-  const handleCancel = () => {
-    dialogVisible.value = false
-  }
-  const handleUpdate = (index) => {
-    action.value = 'update'
-    updateIndex.value = index
-    dialogVisible.value = true
-    formProject.projectIndex = tableData.value[index].projectIndex
-    formProject.projectName = tableData.value[index].projectName
-    formProject.tenderer = tableData.value[index].tenderer
-    formProject.date = tableData.value[index].date
-  }
-  const handleDelete = (index) => {
-    centerDialogVisible.value = true
-    updateIndex.value = index
-  }
-  const handleConfirm = () => {
-    tableData.value.splice(updateIndex, 1)
-    centerDialogVisible.value = false
-  }
-  const onSubmit = () => {
-    proxy.$refs['projectForm'].validate((vaild) => {
-      if (vaild) {
-        const projectAdd = {
-          projectIndex: formProject.projectIndex,
-          projectName: formProject.projectName,
-          tenderer: formProject.tenderer,
-          date: formProject.date
-        }
-        if (action.value == 'add') {
-          tableData.value.push(projectAdd)
-          dialogVisible.value = false
-          proxy.$refs['projectForm'].resetFields()
-        } else {
-          tableData.value.splice(updateIndex.value, 1, projectAdd)
-          dialogVisible.value = false
-          proxy.$refs['projectForm'].resetFields()
-        }
+  Object.assign(formProject, {});
+  dialogVisible.value = true;
+  action.value = "add";
+};
+const handleClose = () => {
+  dialogVisible.value = false;
+};
+const handleCancel = () => {
+  dialogVisible.value = false;
+};
+const handleUpdate = (index) => {
+  action.value = "update";
+  updateIndex.value = index;
+  dialogVisible.value = true;
+  formProject.projectIndex = tableData.value[index].projectIndex;
+  formProject.projectName = tableData.value[index].projectName;
+  formProject.tenderer = tableData.value[index].tenderer;
+  formProject.date = tableData.value[index].date;
+};
+const handleDelete = (index) => {
+  centerDialogVisible.value = true;
+  updateIndex.value = index;
+};
+const handleConfirm = () => {
+  tableData.value.splice(updateIndex, 1);
+  centerDialogVisible.value = false;
+};
+const onSubmit = () => {
+  proxy.$refs["projectForm"].validate((vaild) => {
+    if (vaild) {
+      const projectAdd = {
+        projectIndex: formProject.projectIndex,
+        projectName: formProject.projectName,
+        tenderer: formProject.tenderer,
+        date: formProject.date,
+      };
+      if (action.value == "add") {
+        tableData.value.push(projectAdd);
+        dialogVisible.value = false;
+        proxy.$refs["projectForm"].resetFields();
       } else {
-        alert('请输入必须入力项目')
+        tableData.value.splice(updateIndex.value, 1, projectAdd);
+        dialogVisible.value = false;
+        proxy.$refs["projectForm"].resetFields();
       }
-    })
-  }
-
-  import * as xlsx from 'xlsx'
-  import { ElMessage } from 'element-plus'
-  const uploadRefMap = ref({})
-
-  // 动态设置upload Ref
-  const handleSetUploadRefMap = (el) => {
-    if (el) {
-      uploadRefMap.value[`Upload_Ref`] = el
+    } else {
+      alert("请输入必须入力项目");
     }
-  }
+  });
+};
 
-  // 文件上传自定义
-  const httpExcelRequest = async (op) => {
-    // 获取上传的excel  并解析数据
-    let file = op.file
-    let dataBinary = await readFile(file)
-    let workBook = xlsx.read(dataBinary, { type: "binary", cellDates: true })
-    let workSheet = workBook.Sheets[workBook.SheetNames[0]]
-    const excelData = xlsx.utils.sheet_to_json(workSheet, { header: 1 }).slice(1)
-    excelData.forEach(element => {
-      const data = {
-        projectIndex: '',
-        projectName: '',
-        tenderer: '',
-        date: ''
-      }
-      data.projectIndex = element[0]
-      data.projectName = element[1]
-      data.tenderer = element[2]
-      data.date = format(element[3], 'yyyy-MM-dd')
-      tableData.value.push(data)
-    })
-    if (uploadRefMap.value[`Upload_Ref`]) {
-      uploadRefMap.value[`Upload_Ref`].clearFiles()
-    }
+import * as xlsx from "xlsx";
+import { ElMessage } from "element-plus";
+const uploadRefMap = ref({});
+
+// 动态设置upload Ref
+const handleSetUploadRefMap = (el) => {
+  if (el) {
+    uploadRefMap.value[`Upload_Ref`] = el;
   }
-  const readFile = (file) => {
-    return new Promise((resolve) => {
-      let reader = new FileReader()
-      reader.readAsBinaryString(file)
-      reader.onload = (ev) => {
-        resolve(ev.target?.result)
-      }
-    })
+};
+
+// 文件上传自定义
+const httpExcelRequest = async (op) => {
+  // 获取上传的excel  并解析数据
+  let file = op.file;
+  let dataBinary = await readFile(file);
+  let workBook = xlsx.read(dataBinary, { type: "binary", cellDates: true });
+  let workSheet = workBook.Sheets[workBook.SheetNames[0]];
+  const excelData = xlsx.utils.sheet_to_json(workSheet, { header: 1 }).slice(1);
+  excelData.forEach((element) => {
+    const data = {
+      projectIndex: "",
+      projectName: "",
+      tenderer: "",
+      date: "",
+    };
+    data.projectIndex = element[0];
+    data.projectName = element[1];
+    data.tenderer = element[2];
+    data.date = format(element[3], "yyyy-MM-dd");
+    tableData.value.push(data);
+  });
+  if (uploadRefMap.value[`Upload_Ref`]) {
+    uploadRefMap.value[`Upload_Ref`].clearFiles();
   }
+};
+const readFile = (file) => {
+  return new Promise((resolve) => {
+    let reader = new FileReader();
+    reader.readAsBinaryString(file);
+    reader.onload = (ev) => {
+      resolve(ev.target?.result);
+    };
+  });
+};
 </script>
 
-<style scoped lang="less">
-  .body-table {
-    width: 100%;
-  }
+<style lang="less" scoped>
+.body-table {
+  width: 100%;
+}
 </style>
