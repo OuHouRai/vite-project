@@ -1,12 +1,16 @@
 <template>
-  <div style="margin-bottom: 20px;">
+  <div style="margin-bottom: 20px;display: flex;">
     <el-button type="primary" @click="handleAddProject">
       新增项目
     </el-button>
-    <el-button type="success" @click="handleBatchImport" plain>
-      批量导入
-    </el-button>
-    <el-button type="info" @click="handleBatchExport" plain>
+    <!-- 上传excel -->
+    <el-upload :ref="(el) => handleSetUploadRefMap(el)" action="" :http-request="httpExcelRequest" :limit="1"
+      :show-file-list="false" :data={} style="margin-left: 20px;">
+      <el-button type="success" plain>
+        批量导入
+      </el-button>
+    </el-upload>
+    <el-button type="info" @click="handleBatchExport" plain style="margin-left: 20px;">
       批量导出
     </el-button>
   </div>
@@ -84,8 +88,9 @@
 <script lang="ts" setup>
   import { ElTable } from 'element-plus'
   import { reactive, ref, getCurrentInstance } from "vue"
-
+  import { format } from 'date-fns'
   const { proxy } = getCurrentInstance()
+  const { $untils, $isNull } = proxy
   const action = ref('add')
   const updateIndex = ref(0)
   const centerDialogVisible = ref(false)
@@ -175,27 +180,52 @@
       }
     })
   }
-  const tableData1 = [
-    {
-      projectIndex: 'CDZBFW-2024-101',
-      projectName: '郑东新区社区服务项目',
-      tenderer: '社区居民委员会',
-      date: '2024-05-04'
-    },
-    {
-      projectIndex: 'CDZBFW-2024-102',
-      projectName: '洛阳市人民政府后勤保障处',
-      tenderer: '社会保障部',
-      date: '2024-06-08'
-    },
-    {
-      projectIndex: 'CDZBFW-2024-103',
-      projectName: '洛阳市运河水利指挥系统中心',
-      tenderer: '民众运营中心',
-      date: '2024-12-06'
-    },
 
-  ]
+  import * as xlsx from 'xlsx'
+  import { ElMessage } from 'element-plus'
+  const uploadRefMap = ref({})
+
+  // 动态设置upload Ref
+  const handleSetUploadRefMap = (el) => {
+    if (el) {
+      uploadRefMap.value[`Upload_Ref`] = el
+    }
+  }
+
+  // 文件上传自定义
+  const httpExcelRequest = async (op) => {
+    // 获取上传的excel  并解析数据
+    let file = op.file
+    let dataBinary = await readFile(file)
+    let workBook = xlsx.read(dataBinary, { type: "binary", cellDates: true })
+    let workSheet = workBook.Sheets[workBook.SheetNames[0]]
+    const excelData = xlsx.utils.sheet_to_json(workSheet, { header: 1 }).slice(1)
+    excelData.forEach(element => {
+      const data = {
+        projectIndex: '',
+        projectName: '',
+        tenderer: '',
+        date: ''
+      }
+      data.projectIndex = element[0]
+      data.projectName = element[1]
+      data.tenderer = element[2]
+      data.date = format(element[3], 'yyyy-MM-dd')
+      tableData.value.push(data)
+    })
+    if (uploadRefMap.value[`Upload_Ref`]) {
+      uploadRefMap.value[`Upload_Ref`].clearFiles()
+    }
+  }
+  const readFile = (file) => {
+    return new Promise((resolve) => {
+      let reader = new FileReader()
+      reader.readAsBinaryString(file)
+      reader.onload = (ev) => {
+        resolve(ev.target?.result)
+      }
+    })
+  }
 </script>
 
 <style scoped lang="less">
