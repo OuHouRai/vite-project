@@ -36,9 +36,9 @@ export const useAllDataStore = defineStore("allData", () => {
       if (JSON.parse(localStorage.getItem("store"))) {
         state.value = JSON.parse(localStorage.getItem("store"));
         state.value.routerList = [];
+      } else {
+        return;
       }
-    } else {
-      return;
     }
     const menu = state.value.menuList;
     const module = import.meta.glob("../views/*/index.vue");
@@ -60,7 +60,11 @@ export const useAllDataStore = defineStore("allData", () => {
     state.value.routerList = [];
     let routers = router.getRoutes();
     routers.forEach((item) => {
-      if (item.name === "main" || item.name === "login") {
+      if (
+        item.name === "main" ||
+        item.name === "login" ||
+        item.name === "error"
+      ) {
         return;
       } else {
         router.removeRoute(item.name);
@@ -68,9 +72,18 @@ export const useAllDataStore = defineStore("allData", () => {
     });
 
     routeArr.forEach((item) => {
+      console.log(router.addRoute("main", item), 11111);
       state.value.routerList.push(router.addRoute("main", item));
     });
   }
 
-  return { state, updateMenuList, addMenu };
+  function clean() {
+    state.value.routerList.forEach((item) => {
+      if (item) item();
+    });
+    state.value = initState();
+    localStorage.removeItem("store");
+  }
+
+  return { state, updateMenuList, addMenu, clean };
 });

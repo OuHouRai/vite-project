@@ -39,6 +39,7 @@ const handleCollapse = () => {
 };
 
 const backLogin = () => {
+  store.clean();
   router.push("/login");
 };
 </script>

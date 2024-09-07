@@ -11,10 +11,10 @@ import { createRouter, createWebHashHistory } from "vue-router";
 //制定路由规则
 const routes = [
   {
-    // path: "/",
+    path: "/",
     name: "main",
-    redirect: "/home",
     component: () => import("@/views/main/index.vue"),
+    redirect: "/home",
     children: [
       // {
       //   path: "/home",
@@ -47,6 +47,11 @@ const routes = [
     path: "/login",
     name: "login",
     component: () => import("@/views/login/index.vue"),
+  },
+  {
+    path: "/error",
+    name: "error",
+    component: () => import("@/views/error/index.vue"),
   },
 ];
 

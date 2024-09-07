@@ -17,7 +17,10 @@ const handleLogin = async () => {
   store.updateMenuList(res.menuList);
   store.state.token = res.token;
   store.addMenu(router);
-  router.push("/home");
+  setTimeout(() => {
+    router.push("/home");
+  }, 0);
+  console.log(router.getRoutes(), "6666");
 };
 </script>
 

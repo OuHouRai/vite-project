@@ -68,7 +68,7 @@ const widthData = computed(() => {
 });
 
 const handleMenu = (item) => {
-  console.log(item, "item");
+  // console.log(item, "item");
   router.push(item.path);
 };
 </script>
