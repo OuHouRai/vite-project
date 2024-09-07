@@ -1,7 +1,7 @@
 <template>
   <div style="margin-bottom: 20px;">
     <el-button type="primary" @click="handleAddUser">
-      新增用户
+      添加专家信息
     </el-button>
   </div>
   <el-table :data="tableData" class="body-table">
@@ -9,10 +9,13 @@
     <el-table-column label="编号" class="table-index" width="80">
       <template #default="scope">{{ scope.$index + 1 }}</template>
     </el-table-column>
-    <el-table-column property="userIndex" label="用户名" />
-    <el-table-column property="position" label="职位" show-overflow-tooltip />
-    <el-table-column property="telephone" label="手机号码" />
-    <el-table-column property="permissions" label="权限" width="120" />
+    <el-table-column property="userIndex" label="姓名" width="80" />
+    <el-table-column property="position" label="职称" width="100" />
+    <el-table-column property="sex" label="性别" width="80" />
+    <el-table-column property="specialized" label="专业" width="100" />
+    <el-table-column property="firm" label="公司" />
+    <el-table-column property="identificationNumber" label="身份证号" />
+    <el-table-column property="telephone" label="手机号" width="180" />
     <el-table-column width="100">
       <template #default="scope">
         <el-button type="primary" @click.prevent="handleUpdate(scope.$index)">
@@ -30,7 +33,7 @@
   </el-table>
   <!-- 删除弹窗 -->
   <el-dialog v-model="centerDialogVisible" title="提示" width="500">
-    <span>请问确定要删除用户么？</span>
+    <span>请问确定要删除该专家么？</span>
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取消</el-button>
@@ -41,27 +44,43 @@
     </template>
   </el-dialog>
   <!-- 修改或编辑项目弹窗 -->
-  <el-dialog v-model="dialogVisible" :title="action == 'add' ? '新增用户' : '修改用户'" width="35%" :before-close="handleClose">
+  <el-dialog v-model="dialogVisible" :title="action == 'add' ? '添加专家信息' : '修改专家'" width="35%"
+    :before-close="handleClose">
     <el-form :inline="true" :model="formUser" :rules="rules" ref="userForm">
       <el-row>
         <el-col :span="12">
-          <el-form-item lable="用户名" prop="userIndex">
-            <el-input v-model="formUser.userIndex" placeholder="请输入用户名" />
+          <el-form-item lable="姓名" prop="userIndex">
+            <el-input v-model="formUser.userIndex" placeholder="请输入姓名" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item lable="职位" prop="position">
-            <el-input v-model="formUser.position" placeholder="请输入职位" />
+          <el-form-item lable="职称" prop="position">
+            <el-input v-model="formUser.position" placeholder="请输入职称" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item lable="手机号码" prop="telephone">
-            <el-input v-model="formUser.telephone" placeholder="请输入手机号码" />
+          <el-form-item lable="性别" prop="position">
+            <el-input v-model="formUser.sex" placeholder="请输入性别" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item lable="权限" prop="permissions">
-            <el-input v-model="formUser.permissions" placeholder="权限" />
+          <el-form-item lable="专业" prop="specialized">
+            <el-input v-model="formUser.specialized" placeholder="请输入专业" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item lable="公司" prop="firm">
+            <el-input v-model="formUser.firm" placeholder="请输入公司" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item lable="身份证号" prop="identificationNumber">
+            <el-input v-model="formUser.identificationNumber" placeholder="请输入身份证号" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item lable="手机号" prop="telephone">
+            <el-input v-model="formUser.telephone" placeholder="请输入手机号" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -87,36 +106,42 @@
   const formUser = reactive({
     userIndex: '',
     position: '',
+    sex: '',
+    specialized: '',
+    firm: '',
+    identificationNumber: '',
     telephone: '',
-    permissions: ''
   })
   const rules = reactive({
-    userIndex: [{ required: true, message: "用户名为必须入力项", trigger: "blur" }]
+    userIndex: [{ required: true, message: "姓名为必须入力项", trigger: "blur" }]
   })
   const tableData = ref([
     {
-      userIndex: '张三',
-      position: '经理',
-      telephone: '13687979233',
-      permissions: '用户'
+      userIndex: '张又名',
+      position: '普通专家',
+      sex: '男',
+      specialized: '居家类',
+      firm: '太康县信达商业咨询有限公司',
+      identificationNumber: '412724199709082675',
+      telephone: '136879792533',
     },
     {
-      userIndex: '李四',
-      position: '文员',
-      telephone: '13073448079',
-      permissions: '用户'
+      userIndex: '刘书纯',
+      position: '高级专家',
+      sex: '男',
+      specialized: '商务类',
+      firm: '洛阳市云天盛科技有限公司',
+      identificationNumber: '498724199809082675',
+      telephone: '136823434433',
     },
     {
-      userIndex: '王五',
-      position: '总经理',
-      telephone: '13888888888',
-      permissions: '管理员'
-    },
-    {
-      userIndex: '赵伊尔',
-      position: '公关经理',
-      telephone: '13812334343',
-      permissions: '特殊用户'
+      userIndex: '陈永红',
+      position: '中级专家',
+      sex: '女',
+      specialized: '技术类',
+      firm: '洛阳市天大商务有限公司',
+      identificationNumber: '353724199009082675',
+      telephone: '136823434433',
     },
 
   ])
@@ -141,8 +166,11 @@
     dialogVisible.value = true
     formUser.userIndex = tableData.value[index].userIndex
     formUser.position = tableData.value[index].position
+    formUser.sex = tableData.value[index].sex
+    formUser.specialized = tableData.value[index].specialized
+    formUser.firm = tableData.value[index].firm
+    formUser.identificationNumber = tableData.value[index].identificationNumber
     formUser.telephone = tableData.value[index].telephone
-    formUser.permissions = tableData.value[index].permissions
   }
   const handleDelete = (index) => {
     centerDialogVisible.value = true
@@ -155,18 +183,21 @@
   const onSubmit = () => {
     proxy.$refs['userForm'].validate((vaild) => {
       if (vaild) {
-        const projectAdd = {
+        const userAdd = {
           userIndex: formUser.userIndex,
           position: formUser.position,
+          sex: formUser.sex,
+          specialized: formUser.specialized,
+          firm: formUser.firm,
+          identificationNumber: formUser.identificationNumber,
           telephone: formUser.telephone,
-          permissions: formUser.permissions
         }
         if (action.value == 'add') {
-          tableData.value.push(projectAdd)
+          tableData.value.push(userAdd)
           dialogVisible.value = false
           proxy.$refs['userForm'].resetFields()
         } else {
-          tableData.value.splice(updateIndex.value, 1, projectAdd)
+          tableData.value.splice(updateIndex.value, 1, userAdd)
           dialogVisible.value = false
           proxy.$refs['userForm'].resetFields()
         }
