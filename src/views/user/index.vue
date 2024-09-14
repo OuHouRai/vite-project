@@ -1,8 +1,12 @@
 <template>
-  <div style="margin-bottom: 20px;">
+  <div style="margin-bottom: 20px;display: flex;">
     <el-button type="primary" @click="handleAddUser">
       添加专家信息
     </el-button>
+    <el-upload :ref="(el) => handleSetUploadRefMap(el)" action="" :http-request="httpExcelRequest" :limit="1"
+      :show-file-list="false" :data="{}" style="margin-left: 20px">
+      <el-button type="success" plain> 批量导入 </el-button>
+    </el-upload>
   </div>
   <el-table :data="tableData" class="body-table">
     <el-table-column type="selection" class="table-selection" width="55" />
@@ -97,12 +101,15 @@
 <script lang="ts" setup>
   import { ElTable } from 'element-plus'
   import { reactive, ref, getCurrentInstance } from "vue"
+  import * as xlsx from "xlsx"
+  import { ElMessage } from "element-plus"
 
   const { proxy } = getCurrentInstance()
   const action = ref('add')
   const updateIndex = ref(0)
   const centerDialogVisible = ref(false)
   const dialogVisible = ref(false)
+  const uploadRefMap = ref({})
   const formUser = reactive({
     userIndex: '',
     position: '',
@@ -206,6 +213,54 @@
       }
     })
   }
+  // 动态设置upload Ref
+  const handleSetUploadRefMap = (el) => {
+    if (el) {
+      uploadRefMap.value[`Upload_Ref`] = el
+    }
+  }
+
+  // 文件上传自定义
+  const httpExcelRequest = async (op) => {
+    // 获取上传的excel  并解析数据
+    let file = op.file
+    let dataBinary = await readFile(file)
+    let workBook = xlsx.read(dataBinary, { type: "binary", cellDates: true })
+    let workSheet = workBook.Sheets[workBook.SheetNames[0]]
+    const excelData = xlsx.utils.sheet_to_json(workSheet, { header: 1 }).slice(1)
+
+    excelData.forEach((element) => {
+      const data = {
+        userIndex: formUser.userIndex,
+        position: formUser.position,
+        sex: formUser.sex,
+        specialized: formUser.specialized,
+        firm: formUser.firm,
+        identificationNumber: formUser.identificationNumber,
+        telephone: formUser.telephone,
+      }
+      data.userIndex = element[0]
+      data.position = element[1]
+      data.sex = element[2]
+      data.specialized = element[3]
+      data.firm = element[4]
+      data.identificationNumber = element[5]
+      data.telephone = element[6]
+      tableData.value.push(data)
+    })
+    if (uploadRefMap.value[`Upload_Ref`]) {
+      uploadRefMap.value[`Upload_Ref`].clearFiles()
+    }
+  }
+  const readFile = (file) => {
+    return new Promise((resolve) => {
+      let reader = new FileReader()
+      reader.readAsBinaryString(file)
+      reader.onload = (ev) => {
+        resolve(ev.target?.result)
+      }
+    })
+  };
 </script>
 
 <style scoped lang="less">

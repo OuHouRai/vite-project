@@ -1,7 +1,7 @@
-import Mock from "mockjs";
+import Mock from "mockjs"
 export default {
   getMenu: (config) => {
-    const { username, password } = JSON.parse(config.body);
+    const { username, password } = JSON.parse(config.body)
     // 先判断用户是否存在
     // 判断账号和密码是否对应
     //menuList用于后面做权限分配，也就是用户可以展示的菜单
@@ -20,7 +20,7 @@ export default {
             {
               path: "/mall",
               name: "mall",
-              label: "商品管理",
+              label: "项目管理",
               icon: "video-play",
               url: "mall",
             },
@@ -30,6 +30,13 @@ export default {
               label: "用户管理",
               icon: "user",
               url: "user",
+            },
+            {
+              path: "/selected",
+              name: "selected",
+              label: "抽选管理",
+              icon: "grid",
+              url: "selected",
             },
             {
               path: "other",
@@ -56,7 +63,7 @@ export default {
           token: Mock.Random.guid(),
           message: "获取成功",
         },
-      };
+      }
     } else if (username === "wang" && password === "wang") {
       return {
         code: 200,
@@ -80,14 +87,14 @@ export default {
           token: Mock.Random.guid(),
           message: "获取成功",
         },
-      };
+      }
     } else {
       return {
         code: -999,
         data: {
           message: "密码错误",
         },
-      };
+      }
     }
   },
-};
+}
